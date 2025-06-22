@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scentsbyemily</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff8f8;
+      color: #333;
+    }
+    header {
+      background-color: #fce4ec;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      color: #e91e63;
+      font-size: 2rem;
+    }
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .produto {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .produto img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .produto .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .produto .info span:first-child {
+      font-weight: bold;
+    }
+    button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #c2185b;
+    }
+    .carrinho {
+      margin-top: 40px;
+      background: #fce4ec;
+      padding: 20px;
+      border-radius: 16px;
+    }
+    .carrinho h2 {
+      color: #880e4f;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    @media (max-width: 600px) {
+      .produto { flex-direction: column; align-items: flex-start; }
+      .produto button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Scentsbyemily</h1>
+  </header>
+
+  <div class="container">
+    <div class="produto">
+      <img src="https://via.placeholder.com/80" alt="Floratta Red">
+      <div class="info">
+        <span>Floratta Red Body spray</span>
+        <span>R$ 32,90</span>
+        <button onclick="adicionarAoCarrinho('Floratta Red Body spray', 32.90)">Adicionar</button>
+      </div>
+    </div>
+    <div class="produto">
+      <img src="https://via.placeholder.com/80" alt="Hidratante Lily">
+      <div class="info">
+        <span>Hidratante Corporal Lily</span>
+        <span>R$ 104,90</span>
+        <button onclick="adicionarAoCarrinho('Hidratante Corporal Lily', 104.90)">Adicionar</button>
+      </div>
+    </div>
+    <div class="produto">
+      <img src="https://via.placeholder.com/80" alt="Sabonete Artesanal">
+      <div class="info">
+        <span>Sabonete Artesanal</span>
+        <span>R$ 14,90</span>
+        <button onclick="adicionarAoCarrinho('Sabonete Artesanal', 14.90)">Adicionar</button>
+      </div>
+    </div>
+
+    <div class="carrinho">
+      <h2>Seu Carrinho</h2>
+      <ul id="lista-carrinho"></ul>
+      <p><strong>Total:</strong> R$ <span id="total">0.00</span></p>
+      <button onclick="finalizarPedido()">Finalizar Pedido via WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    let carrinho = [];
+
+    function adicionarAoCarrinho(nome, preco) {
+      carrinho.push({ nome, preco });
+      atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+      const lista = document.getElementById('lista-carrinho');
+      const totalSpan = document.getElementById('total');
+      lista.innerHTML = '';
+      let total = 0;
+
+      carrinho.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+        lista.appendChild(li);
+        total += item.preco;
+      });
+
+      totalSpan.textContent = total.toFixed(2);
+    }
+
+    function finalizarPedido() {
+      if (carrinho.length === 0) {
+        alert("Adicione produtos ao carrinho primeiro!");
+        return;
+      }
+      let mensagem = "Olá, gostaria de fazer um pedido:%0A";
+      carrinho.forEach(item => {
+        mensagem += `- ${item.nome} - R$ ${item.preco.toFixed(2)}%0A`;
+      });
+      const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
+      mensagem += `%0ATotal: R$ ${total.toFixed(2)}`;
+
+      const numeroWhatsApp = "5519987718364";
+      const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
